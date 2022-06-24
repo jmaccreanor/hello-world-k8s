@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    app: mysql-service
+spec:
+  ports:
+    - port: 3306
+      name: mysql
+  clusterIP: None
+  selector:
+    app: mysql-stateful-set
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql-statefulset
+  labels:
+    app: mysql-stateful-set
+spec:
+  serviceName: mysql-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-stateful-set
+  template:
+    metadata:
+      labels:
+        app: mysql-stateful-set
+    spec:
+      containers:
+        - image: mysql:5.7
+          name: mysqldb
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-volume
+              mountPath: /var/lib/mysql
+          env:
+           - name: MYSQL_ROOT_PASSWORD
+             valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: password
+      volumes:
+        - name: mysql-volume
+          persistentVolumeClaim:
+            claimName: mysql-claim
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-claim
+  labels:
+    app: mysql-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

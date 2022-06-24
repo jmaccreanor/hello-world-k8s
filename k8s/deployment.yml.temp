@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: # <app deployment name>
+spec:
+  selector:
+    matchLabels:
+      app: # <app name>
+  replicas: # number of pods to create ie 3
+  template:
+    metadata:
+      labels:
+        app: # <app name>
+    spec:
+      containers:
+        - name: # <container name>
+          image: # <username>/<app name>:<version>
+          ports:
+          - containerPort: # <port your app runs on>

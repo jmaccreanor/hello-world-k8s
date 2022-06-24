@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hello-world
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: hello-world-container
+          image: jmaccreanoreq/hello-world:v6
+          ports:
+          - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: hello-world-config-map
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password

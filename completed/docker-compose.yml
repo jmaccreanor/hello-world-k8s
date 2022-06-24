@@ -1,0 +1,48 @@
+# For local development
+version: "3.7"
+
+# Define services
+services:
+
+  # Application
+  app:
+
+    # Build step - looks for Dockerfile
+    build: .
+
+    # Port mapping
+    ports:
+      - "3000:3000"
+
+    # Start the DB before running the app
+    depends_on:
+      - mysql
+
+    # Vars
+    environment:
+      DB_PASSWORD: password
+      DB_USERNAME: root
+      DB_PORT: 3306
+      DB_HOST: mysql
+
+  # Database
+  mysql:
+
+    # MySQL image
+    image: mysql:5.7
+
+    # DB port mapping
+    ports:
+      - "3306:3306"
+
+    # Vars
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+
+      # Where our data will be persisted
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+# Name our volume
+volumes:
+  mysql-volume:

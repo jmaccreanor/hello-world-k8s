@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hello-world-config-map
+data:
+    DB_USERNAME: "root"
+    DB_PORT: "3306"
+    DB_HOST: mysql-service
