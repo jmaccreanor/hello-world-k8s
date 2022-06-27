@@ -123,10 +123,10 @@ Run `kubectl apply -f service.yml` to create the service <br>
 Once created it should appear in the dashboard <br>
 Copy a pod name from the output of `kubectl get pods` <br>
 Run `kubectl exec --stdin --tty <pod name> -- /bin/bash` to launch a bash session inside the pod <br>
-Now you can hit the service from inside the pod with `curl <cluster ip>` which should return some json: 
+Now you can hit the service from inside the pod with `curl <cluster ip>:<port>` which should return some json: 
 
 ```
-root@hello-world-deployment-6bbc76b598-2zhj5:/usr/src/app# curl 10.102.210.140
+root@hello-world-deployment-6bbc76b598-2zhj5:/usr/src/app# curl 10.102.210.140:3000
 {"message":"Your app is listening on port: 3000. DB is not connected!"}
 ```
 
@@ -210,7 +210,7 @@ volumes:
 ```
 
 Uncomment the DB connection code in `src/app.js` and run `docker compose build && docker compose up` <br>
-The following should be printed to the conosle: 
+The following should be printed to the console: 
 ```
 | Hello World!
 | DB Connected!
@@ -218,7 +218,7 @@ The following should be printed to the conosle:
 ## Part 4 - Running MySQL on Kubernetes
 Similarly to what we did with our application, we can run a MySQL image on kubernetes that we can connect our app to <br>
 
-###Create MySQL manifest
+### Create MySQL manifest
 Rename `mysql.yml.temp` to `mysql.yml` and fill in the commented values <br>
 This yml file creates a service, StatefulSet running a MySQL image, and a persistent volume claim which provisions storage that persists independently to the lifecycle of pods<br>
 Apply the mysql manifest with `kubectl apply -f mysql.yml`<br>
@@ -229,7 +229,7 @@ statefulset.apps/hello-world-mysql created
 persistentvolumeclaim/mysql-pv-claim created
 ```
 
-###Create Config Map
+### Create Config Map
 Use a ConfigMap to store non-confidential DB creds that our app will use to connect to the DB <br>
 Rename `db-configmap.yml.temp` to `db-configmap.yml` and replace the commented values <br>
 Apply the file with kubectl <br>
@@ -240,7 +240,7 @@ Rename `mysql-secret.yml.temp` to `mysql-secret.yml`<br>
 Apply the secret the with kubectl 
 
 
-##Part 5 - Updating app image and redeploy
+## Part 5 - Updating app image and redeploy
 Finally, we need to update our application image with the DB connection code that was uncommented in `app.js` and redeploy <br>
 
 ### Update hello-world Image
