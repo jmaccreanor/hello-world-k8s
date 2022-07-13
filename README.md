@@ -1,4 +1,5 @@
 # Hello World with Docker, Minikube and Kubernetes
+(Working example in /completed directory)
 
 ## Part 1 - Building  and running an app with Docker
 
