@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: hello-world-container
-          image: jmaccreanoreq/hello-world:v6
+          image: jmaccreanoreq/hello-world:v5
           ports:
           - containerPort: 3000
           envFrom:
